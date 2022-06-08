@@ -105,7 +105,7 @@ public class CredlyBadgeSubmitter {
 		} catch (RestClientException e1) {
 			log.error(e1.toString());
 		} catch (Exception e) {
-			log.error("Error parsing user input: {}", e.getMessage());
+			log.error("Error parsing user input: {}", e.toString());
 		}
 
 		finally {
