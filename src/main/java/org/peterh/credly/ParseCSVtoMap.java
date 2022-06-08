@@ -14,9 +14,9 @@ import org.slf4j.LoggerFactory;
 
 public class ParseCSVtoMap {
 
-	static final String fileFormat = "File {} does not exist or is incorrect. File must by csv with the following header:\n"
+	static final String fileFormat = "\n*** File {} does not exist or is incorrect. File must by csv with the following header:\n"
 			+ "Last Name,First Name,Email\n"
-			+ "Export this in Thought Industries under Reporting>Events>Download CSV.\n";
+			+ "*** Export this in Thought Industries under Reporting>Events>Download CSV.\n";
 
 	static final String cla = "Enter the .csv filename";
 
@@ -52,11 +52,11 @@ public class ParseCSVtoMap {
 
 			br.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(fileFormat, fn);
+			log.error(e.toString());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(fileFormat, fn);
+			log.error(e.toString());
 		} finally {
 
 		}

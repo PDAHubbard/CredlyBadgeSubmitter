@@ -43,32 +43,35 @@ public class CredlyBadgeSubmitter {
 			System.exit(1);
 		} catch (Exception e) {
 			log.error("Unable to read properties file: {}", e.getMessage());
+			System.exit(1);
 		}
 
 		filename = args.length == 1 ? args[0] : props.getProperty("InputCSV");
-
-		// Parse the .csv file to create a list of 3-key maps (first/last name and
-		// email)
-		List<HashMap<String, Object>> badgeEarners = cp.parseFile(filename);
-		if (badgeEarners.isEmpty()) {
-			log.error("No names to process in file {}", filename);
-			System.exit(1);
-		}
 
 		// Prepare the REST client interface
 		baseURL = props.getProperty("baseURL");
 		organization = props.getProperty("organization");
 		basicAuth = props.getProperty("basicAuth");
 		RESTClient r;
+
 		try {
+
+			// Parse the .csv file to create a list of 3-key maps (first/last name and
+			// email)
+			List<HashMap<String, Object>> badgeEarners = cp.parseFile(filename);
+			if (badgeEarners.isEmpty()) {
+				log.info("No names to process in file {}", filename);
+				throw new Exception("No users to process.");
+			}
+
 			r = new RESTClient(organization, baseURL, basicAuth);
 
 			// Load the badges
 			CredlyBadgeLoader badgeLoader = new CredlyBadgeLoader();
 			badgeLoader.loadCredlyBadges(r);
 			if (badgeLoader.getCredlyTemplates().isEmpty()) {
-				log.info("No Credly Badge Templates found.");
-				System.exit(1);
+				log.error("No Credly Badge Templates found.");
+				throw new Exception("No Credly Badge Templates found.");
 			}
 
 			// Print the list of badges
@@ -100,7 +103,7 @@ public class CredlyBadgeSubmitter {
 			System.out.printf("Applied %d badge(s)", i);
 
 		} catch (RestClientException e1) {
-			log.error(e1.getMessage());
+			log.error(e1.toString());
 		} catch (Exception e) {
 			log.error("Error parsing user input: {}", e.getMessage());
 		}
