@@ -40,6 +40,8 @@
 							<goal>shade</goal>
 						</goals>
 						<configuration>
+							<outputDirectory>${basedir}/bin</outputDirectory>
+							<finalName>CredlyBadgeSubmitter</finalName>
 							<transformers>
 								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<mainClass>org.peterh.credly.CredlyBadgeSubmitter</mainClass>
