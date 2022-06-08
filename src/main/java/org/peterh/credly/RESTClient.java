@@ -8,7 +8,11 @@ public class RESTClient {
 
 	private String organization, baseUrl, basicAuth;
 
-	public RESTClient(String org, String bUrl, String bAuth) {
+	public RESTClient(String org, String bUrl, String bAuth) throws RestClientException {
+		
+		if (bUrl==null || bUrl.length()<1)
+			throw new RestClientException("Base URL was null or not specified, check the 'baseURL' property.");
+		
 		this.organization = org;
 		this.baseUrl = bUrl;
 		this.basicAuth = bAuth;
