@@ -3,6 +3,8 @@ package org.peterh.credly;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.peterh.credly.util.CredlyBadgeTemplate;
+import org.peterh.credly.util.RESTClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,23 +35,27 @@ public class CredlyBadgeLoader {
 	 * already.
 	 */
 	public void loadCredlyBadges(RESTClient r) {
-		credlyTemplates = new ArrayList<CredlyBadgeTemplate>();
+		credlyTemplates = new ArrayList<>();
 
 		HttpResponse<JsonNode> response = r.get("/badge_templates");
+		JSONObject o = response.getBody().getObject();
+		
 				
 		if (response.isSuccess()) {
-			JSONObject o = response.getBody().getObject();
 			JSONArray a = o.getJSONArray("data");
 			for (int i = 0; i < a.length(); i++) {
 				JSONObject o1 = a.getJSONObject(i);
 				CredlyBadgeTemplate ct = new CredlyBadgeTemplate(o1.get("id").toString(), o1.get("name").toString());
 				credlyTemplates.add(ct);
-				log.debug("{}: {} (id: {})", i, o1.get("name"), o1.get("id"));
-
+				
+				log.debug("Badge number {}: {} (id: {})", i, o1.get("name"), o1.get("id"));
 			}
 			log.info("Loaded {} badge templates", credlyTemplates.size());
 		} else {
-			log.error("REST error reading badge templates: {}", response.getStatusText());
+			JSONObject o2 = o.getJSONObject("data");
+			String message = o2.getString("message");
+			log.error("REST error reading badge templates: {}: {}", response.getStatusText(), message);
+			log.debug(response.getBody().toPrettyString());
 		}
 	}
 

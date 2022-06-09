@@ -1,4 +1,4 @@
-package org.peterh.credly;
+package org.peterh.credly.util;
 
 public class CredlyBadgeTemplate {
 	private String id;

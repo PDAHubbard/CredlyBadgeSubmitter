@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 public class ParseCSVtoMap {
 
-	static final String fileFormat = "\n*** File {} does not exist or is incorrect. File must by csv with the following header:\n"
+	static final String fileFormat = "\n*** File {} does not exist or is incorrect. File must be a .csv with the following header:\n"
 			+ "Last Name,First Name,Email\n"
 			+ "*** Export this in Thought Industries under Reporting>Events>Download CSV.\n";
 
@@ -41,6 +41,10 @@ public class ParseCSVtoMap {
 					HashMap<String, Object> map = new HashMap<String, Object>();
 					log.debug("Read {}", line);
 					String[] data = line.split(",");
+					if (data.length!=3) {
+						log.debug("Could not split '{}' into 3 fields: ", line);
+						throw new IOException("csv file format incorrect.");
+					}
 					map.put("issued_to_last_name", data[0]);
 					map.put("issued_to_first_name", data[1]);
 					map.put("recipient_email", data[2]);

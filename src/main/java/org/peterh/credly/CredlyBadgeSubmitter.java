@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
 
+import org.peterh.credly.util.RESTClient;
+import org.peterh.credly.util.RestClientException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,20 +33,14 @@ public class CredlyBadgeSubmitter {
 
 		Properties props = new Properties();
 		try {
-			// props.load(CredlyBadgeSubmitter.class.getClassLoader().getResourceAsStream(propsFileName));
 			props.load(new FileReader(new File(".").getCanonicalPath() + File.separator + "config.properties"));
-
-		} catch (FileNotFoundException e) {
-			log.error("Unable to find properties file: {}", e.getMessage());
-			System.exit(1);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (IOException e) {
+			log.error("Unable to read properties file: {}", e.toString());
 			System.exit(1);
 		} catch (Exception e) {
-			log.error("Unable to read properties file: {}", e.getMessage());
+			log.error("Unable to read properties file: {}", e.toString());
 			System.exit(1);
-		}
+		} 
 
 		filename = args.length == 1 ? args[0] : props.getProperty("InputCSV");
 

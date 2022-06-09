@@ -1,4 +1,4 @@
-package org.peterh.credly;
+package org.peterh.credly.util;
 
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
