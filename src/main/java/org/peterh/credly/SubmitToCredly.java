@@ -36,6 +36,7 @@ public class SubmitToCredly {
 		log.debug("Outputting badges to file {}",outFilename);
 		out = new BufferedWriter(new FileWriter(outFilename));
 		out.write("recipient_email,badge_id");
+		out.newLine();
 	}
 
 	private String buildBadgeRequest(String badgeId, HashMap<String, Object> student) {
@@ -66,6 +67,8 @@ public class SubmitToCredly {
 
 	private void writeBadge(String email, String badgeId) throws IOException {
 		out.write(email + "," + badgeId);
+		out.newLine();
+		out.flush();
 	}
 
 	public int applyAllBadges(CredlyBadgeTemplate ct, List<HashMap<String, Object>> studentList) {
