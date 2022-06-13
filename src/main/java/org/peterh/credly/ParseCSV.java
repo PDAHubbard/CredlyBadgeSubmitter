@@ -12,7 +12,7 @@ import org.peterh.credly.util.MyLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ParseCSVtoMap {
+public class ParseCSV {
 
 	static final String fileFormat = "\n*** File {} does not exist or is incorrect. File must be a .csv with the following header:\n"
 			+ "Last Name,First Name,Email\n"
@@ -20,9 +20,7 @@ public class ParseCSVtoMap {
 
 	static final String cla = "Enter the .csv filename";
 
-
-	final static Logger log = LoggerFactory.getLogger(ParseCSVtoMap.class);
-
+	private final static Logger log = LoggerFactory.getLogger(ParseCSV.class);
 
 	public List<HashMap<String, Object>> parseFile(String fn) {
 		String line;
@@ -31,17 +29,16 @@ public class ParseCSVtoMap {
 
 		List<HashMap<String, Object>> mapList = new ArrayList<HashMap<String, Object>>();
 
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(fn));
-
+		try (BufferedReader br = new BufferedReader(new FileReader(fn))){
+			
 			// Check the first line
 			line = br.readLine();
-			if (line!=null && line.compareTo("Last Name,First Name,Email") == 0) {
+			if (line != null && line.compareTo("Last Name,First Name,Email") == 0) {
 				while ((line = br.readLine()) != null) {
 					HashMap<String, Object> map = new HashMap<String, Object>();
 					log.debug("Read {}", line);
 					String[] data = line.split(",");
-					if (data.length!=3) {
+					if (data.length != 3) {
 						log.debug("Could not split '{}' into 3 fields: ", line);
 						throw new IOException("csv file format incorrect.");
 					}
@@ -54,19 +51,12 @@ public class ParseCSVtoMap {
 				log.error(fileFormat, fn);
 			}
 
-			br.close();
-		} catch (FileNotFoundException e) {
-			log.error(fileFormat, fn);
-			log.error(e.toString());
 		} catch (IOException e) {
 			log.error(fileFormat, fn);
 			log.error(e.toString());
-		} finally {
-
-		}
+		} 
 		log.info("Read {} lines", mapList.size());
 		return mapList;
-
 	}
 
 	/*
